@@ -13,7 +13,7 @@ const IndexPage = () => {
           return res.data.results
         })
     }, {
-      refetchOnWindowFocus: false,
+      // refetchOnWindowFocus: false,
     },
   )
 
@@ -28,6 +28,8 @@ const IndexPage = () => {
         {queryInfo.data?.map((result) => {
           return <div key={result.name}>{result.name}</div>
         })}
+        <br />
+        {queryInfo.isFetching ? 'Updating ...' : null}
       </div>
     )
 }
