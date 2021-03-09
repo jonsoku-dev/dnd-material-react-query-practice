@@ -5,7 +5,7 @@ interface Props {
   queryKey?: string
 }
 
-const Pokemon: React.FC<Props> = ({ queryKey = 'pokemon' }) => {
+const Pokemon: React.FC<Props> = ({ queryKey }) => {
   const queryInfo = usePokemon({ queryKey })
 
   return queryInfo.isLoading ? (

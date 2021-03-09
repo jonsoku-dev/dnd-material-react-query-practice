@@ -2,7 +2,7 @@ import React from 'react'
 import usePokemon from '../../hooks/usePokemon'
 
 interface Props {
-  queryKey: string
+  queryKey?: string
 }
 
 const Count: React.FC<Props> = ({ queryKey }) => {

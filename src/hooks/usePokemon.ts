@@ -3,10 +3,10 @@ import axios from 'axios'
 import { PokemonResponse } from '../types/pokemon'
 
 interface UsePokemonProps {
-  queryKey: string
+  queryKey?: string
 }
 
-function usePokemon({ queryKey }: UsePokemonProps) {
+function usePokemon({ queryKey = 'pokemon' }: UsePokemonProps) {
   return useQuery(queryKey, async () => {
       await new Promise(resolve => setTimeout(resolve, 1000))
       return axios
