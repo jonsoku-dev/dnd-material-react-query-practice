@@ -12,6 +12,8 @@ const IndexPage = () => {
         .then(res => {
           return res.data.results
         })
+    }, {
+      refetchOnWindowFocus: false,
     },
   )
 
