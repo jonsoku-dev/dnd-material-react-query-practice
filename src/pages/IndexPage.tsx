@@ -13,7 +13,7 @@ const IndexPage = () => {
           return res.data.results
         })
     }, {
-      // refetchOnWindowFocus: false,
+      staleTime: Infinity,
     },
   )
 
