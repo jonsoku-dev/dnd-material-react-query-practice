@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ThemeProvider, unstable_createMuiStrictModeTheme as createMuiTheme } from '@material-ui/core'
+import React from 'react'
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import DndPage from './pages/DndPage'
+import IndexPage from './pages/IndexPage'
+
+const queryClient = new QueryClient() // Create a client
+const theme = createMuiTheme()
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <Router>
+          <nav>
+            <ul>
+              <li>
+                <Link to='/'>Home</Link>
+              </li>
+              <li>
+                <Link to='/dnd'>Dnd</Link>
+              </li>
+            </ul>
+          </nav>
+
+          <Switch>
+            <Route path='/' exact>
+              <IndexPage />
+            </Route>
+            <Route path='/dnd'>
+              <DndPage />
+            </Route>
+          </Switch>
+        </Router>
+      </ThemeProvider>
+    </QueryClientProvider>
+  )
 }
 
-export default App;
+export default App
