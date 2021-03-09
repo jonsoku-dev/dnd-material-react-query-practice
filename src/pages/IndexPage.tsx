@@ -1,15 +1,12 @@
 import axios from 'axios'
 import React from 'react'
 import { useQuery } from 'react-query'
-import { PokemonResponse, PokemonResult } from '../types/pokemon'
+import { PokemonResponse } from '../types/pokemon'
 
 const IndexPage = () => {
 
   const queryInfo = useQuery('pokemon', async () => {
       await new Promise(resolve => setTimeout(resolve, 1000))
-      if (true) {
-        throw new Error('Test Error')
-      }
       return axios
         .get<PokemonResponse>('https://pokeapi.co/api/v2/pokemon')
         .then(res => {

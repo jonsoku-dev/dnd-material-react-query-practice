@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import DndPage from './pages/DndPage'
 import IndexPage from './pages/IndexPage'
+import { ReactQueryDevtools } from 'react-query/devtools'
+
 
 const queryClient = new QueryClient() // Create a client
 const theme = createMuiTheme()
@@ -34,6 +36,7 @@ function App() {
           </Switch>
         </Router>
       </ThemeProvider>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   )
 }
