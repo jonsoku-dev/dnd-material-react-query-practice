@@ -1,24 +1,12 @@
 import React from 'react'
-import { useQuery } from 'react-query'
-import axios from 'axios'
-import { PokemonResponse } from '../../types/pokemon'
+import usePokemon from '../../hooks/usePokemon'
 
 interface Props {
-  queryKey: string
+  queryKey?: string
 }
 
-const Pokemon: React.FC<Props> = ({ queryKey }) => {
-  const queryInfo = useQuery(queryKey, async () => {
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      return axios
-        .get<PokemonResponse>('https://pokeapi.co/api/v2/pokemon')
-        .then(res => {
-          return res.data.results
-        })
-    }, {
-      cacheTime: 5000,  // toggle 같은 행위로 inactive 되었을때 캐시를 유지하는 시간
-    },
-  )
+const Pokemon: React.FC<Props> = ({ queryKey = 'pokemon' }) => {
+  const queryInfo = usePokemon({ queryKey })
 
   return queryInfo.isLoading ? (
       <span>Loading ...</span>)
