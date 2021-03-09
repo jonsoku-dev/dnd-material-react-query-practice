@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Pokemon from '../components/Pokemon'
 
 const IndexPage = () => {
-  const [toggle, setToggle] = useState(false)
   return (
     <div>
-      <button onClick={() => setToggle(prev => !prev)}>toggle</button>
-      {toggle && <Pokemon />}
+      <Pokemon queryKey={'pokemon1'}/>
+      <Pokemon queryKey={'pokemon1'}/>
+      <Pokemon queryKey={'pokemon1'}/>
     </div>
   )
 }

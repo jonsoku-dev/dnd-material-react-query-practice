@@ -3,8 +3,12 @@ import { useQuery } from 'react-query'
 import axios from 'axios'
 import { PokemonResponse } from '../../types/pokemon'
 
-const Pokemon = () => {
-  const queryInfo = useQuery('pokemon', async () => {
+interface Props {
+  queryKey: string
+}
+
+const Pokemon: React.FC<Props> = ({ queryKey }) => {
+  const queryInfo = useQuery(queryKey, async () => {
       await new Promise(resolve => setTimeout(resolve, 1000))
       return axios
         .get<PokemonResponse>('https://pokeapi.co/api/v2/pokemon')
