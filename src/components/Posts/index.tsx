@@ -7,7 +7,15 @@ interface Props {
   setPostId: (postId: number) => void
 }
 
+const fetchPosts = async () => {
+  await new Promise(resolve => setTimeout(resolve, 1000))
+  return await axios.get<PostResult[]>('https://jsonplaceholder.typicode.com/posts')
+    .then(res => res.data)
+}
+
 const Posts: FunctionComponent<Props> = ({ setPostId }) => {
+  const [count, increment] = React.useReducer(d => d + 1, 0)
+
   // // 애초에 전체 post 을 여기서 캐싱해둔다.
   // const queryClient = useQueryClient()
   // const postsQuery = useQuery('posts', async () => {
@@ -19,13 +27,14 @@ const Posts: FunctionComponent<Props> = ({ setPostId }) => {
   //   return posts
   // })
 
-  const postsQuery = useQuery('posts', () => {
-    return axios.get<PostResult[]>('https://jsonplaceholder.typicode.com/posts')
-      .then(res => res.data)
+  const postsQuery = useQuery('posts', fetchPosts, {
+    onSuccess: (data) => {
+      increment()
+    },
   })
   return (
     <div>
-      <h1>Posts {postsQuery.isFetching ? '...' : null}</h1>
+      <h1>Posts {postsQuery.isFetching ? '...' : null} {count}</h1>
       <div>
         {postsQuery.isLoading ? (
           <span>Loading posts...</span>
