@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import axios from 'axios'
 import { useQuery } from 'react-query'
+import { existingUser } from '../../data/user'
 
 interface Props {
 }
@@ -9,9 +10,16 @@ const email = 'Sincere@april.biz'
 
 const MyPosts: FunctionComponent<Props> = () => {
 
-  const userQuery = useQuery('user', () =>
-    axios.get(`https://jsonplaceholder.typicode.com/users?email=${email}`)
-      .then(res => res.data[0]),
+  const userQuery = useQuery('user', async () => {
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      return await axios.get(`https://jsonplaceholder.typicode.com/users?email=${email}`)
+        .then(res => {
+          return res.data[0]
+        })
+    },
+    {
+      initialData: existingUser,
+    },
   )
 
   const postsQuery = useQuery('posts', () =>
@@ -25,7 +33,8 @@ const MyPosts: FunctionComponent<Props> = () => {
     <span>Loading user...</span>
   ) : (
     <div>
-      <div>User Id: {userQuery.data.id}</div>
+      <div>User Id: {userQuery.data?.id}</div>
+      <pre>{JSON.stringify(userQuery.data, null, 2)}</pre>
       <br />
       <br />
       {postsQuery.isLoading ? (
