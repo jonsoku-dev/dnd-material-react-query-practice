@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from 'react'
-import { useQuery, useQueryClient } from 'react-query'
+import { useQuery } from 'react-query'
 import axios from 'axios'
 import { PostResult } from '../../types/post'
+import { Link } from 'react-router-dom'
 
 interface Props {
-  setPostId: (postId: number) => void
 }
 
 const fetchPosts = async () => {
@@ -13,7 +13,7 @@ const fetchPosts = async () => {
     .then(res => res.data)
 }
 
-const Posts: FunctionComponent<Props> = ({ setPostId }) => {
+const Posts: FunctionComponent<Props> = () => {
   const [count, increment] = React.useReducer(d => d + 1, 0)
 
   // // 애초에 전체 post 을 여기서 캐싱해둔다.
@@ -31,6 +31,10 @@ const Posts: FunctionComponent<Props> = ({ setPostId }) => {
     onSuccess: (data) => {
       increment()
     },
+    onError: (error) => {
+    },
+    onSettled: (data, error) => {
+    },
   })
   return (
     <div>
@@ -43,9 +47,9 @@ const Posts: FunctionComponent<Props> = ({ setPostId }) => {
             {postsQuery.data?.map(post => {
               return (
                 <li key={post.id}>
-                  <a onClick={() => setPostId(post.id)} href='#'>
+                  <Link to={`/post/${post.id}`}>
                     {post.title}
-                  </a>
+                  </Link>
                 </li>
               )
             })}

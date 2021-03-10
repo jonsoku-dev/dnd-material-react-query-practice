@@ -1,14 +1,14 @@
 import React, { FunctionComponent } from 'react'
-import { useQuery, QueryCache, useQueryClient } from 'react-query'
+import { useQuery, useQueryClient } from 'react-query'
 import axios from 'axios'
 import { PostResult } from '../../types/post'
+import { Link } from 'react-router-dom'
 
 interface Props {
-  postId: number
-  setPostId: (postId: number) => void
+  postId: string
 }
 
-const Post: FunctionComponent<Props> = ({ postId, setPostId }) => {
+const Post: FunctionComponent<Props> = ({ postId }) => {
 
   const queryClient = useQueryClient()
 
@@ -17,19 +17,19 @@ const Post: FunctionComponent<Props> = ({ postId, setPostId }) => {
       return axios.get<PostResult>(`https://jsonplaceholder.typicode.com/posts/${postId}`)
         .then((res) => res.data)
     }, {
-      initialData: () => queryClient.getQueryCache().find<PostResult[]>('posts')?.state.data?.find(post => post.id === postId),
+      initialData: () => queryClient.getQueryCache().find<PostResult[]>('posts')?.state.data?.find(post => post.id === +postId),
       // staleTime: 1000, // 다시가져오지않으려면 시간을 정해주면 된다.
     },
   )
 
-  console.log(queryClient.getQueryCache().find<PostResult[]>('posts')?.state.data?.find(post => post.id === postId))
+  console.log(queryClient.getQueryCache().find<PostResult[]>('posts')?.state.data?.find(post => post.id === +postId))
 
 
   return (
     <div>
-      <a onClick={() => setPostId(-1)} href={'#'}>
+      <Link to={`/post`}>
         Back
-      </a>
+      </Link>
       <br />
       <br />
       {postQuery.isLoading

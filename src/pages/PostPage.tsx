@@ -1,24 +1,12 @@
-import React, { FunctionComponent } from 'react'
-import Post from '../components/Post'
+import React, { FC } from 'react'
 import Posts from '../components/Posts'
 
 interface Props {
 }
 
-const PostPage: FunctionComponent<Props> = () => {
-  const [postId, setPostId] = React.useState(-1)
+const PostPage: FC<Props> = () => {
   return (
-    <div>
-      {postId > -1 ? (
-          <Post
-            postId={postId}
-            setPostId={setPostId} />
-        )
-        : (
-          <Posts setPostId={setPostId} />
-        )
-      }
-    </div>
+    <Posts />
   )
 }
 
