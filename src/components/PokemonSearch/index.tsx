@@ -8,22 +8,33 @@ interface Props {
 }
 
 const PokemonSearch: FunctionComponent<Props> = ({ pokemon }) => {
-  const CancelToken = axios.CancelToken
-  const source = CancelToken.source()
-  const queryInfo = useQuery(['pokemon', pokemon], async () => {
-    const promise = axios.get<PokemonSingleResponse>(`https://pokeapi.co/api/v2/pokemon/${pokemon}`, {
-      cancelToken: source.token,
+  const queryInfo = useQuery(
+    ['pokemon', pokemon],
+    () => {
+      const CancelToken = axios.CancelToken
+      const source = CancelToken.source()
+
+      console.log(source.token)
+
+      const promise = new Promise(resolve => setTimeout(resolve, 1000))
+        .then(() => {
+          return axios.get<PokemonSingleResponse>(
+            `https://pokeapi.co/api/v2/pokemon/${pokemon}`,
+            {
+              cancelToken: source.token,
+            },
+          )
+        })
+        .then(res => res.data)
+
+      promise.cancel = () => {
+        source.cancel('Query was cancelled by React Query')
+      }
+
+      return promise
+    }, {
+      enabled: pokemon.length > 0,
     })
-      .then(res => res.data)
-
-    promise.cancel = () => {
-      source.cancel('Query was cancelled by React Query')
-    }
-
-    return promise
-  }, {
-    enabled: pokemon.length > 0,
-  })
 
   console.log(queryInfo)
 
