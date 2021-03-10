@@ -1,13 +1,18 @@
 import { ThemeProvider, unstable_createMuiStrictModeTheme as createMuiTheme } from '@material-ui/core'
 import React from 'react'
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query'
 import DndPage from './pages/DndPage'
 import IndexPage from './pages/IndexPage'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
 
-const queryClient = new QueryClient() // Create a client
+const queryCache = new QueryCache()
+const queryClient = new QueryClient({ queryCache }) // Create a client
 const theme = createMuiTheme()
 
 function App() {
