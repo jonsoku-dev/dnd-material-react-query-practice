@@ -15,6 +15,19 @@ const Memo: FunctionComponent<Props> = () => {
   const { mutate: createMemo, isLoading, isError, isSuccess, error } = useMutation((values: any) => {
     return axios.post('/api/memos', values).then((res) => res.data)
   }, {
+    // Optimistic Updates
+    // 요청 후 fake data 로 바로 데이터 띄우기
+    onMutate: (values) => {
+      queryClient.setQueryData('memos', (oldMemos: any) => {
+        return [
+          ...oldMemos,
+          {
+            ...values,
+            id: Date.now(), // id는 일단.. ?
+          },
+        ]
+      })
+    },
     onError: (error) => {
       const err = error as AxiosError
       window.alert(err.response?.data.message)
