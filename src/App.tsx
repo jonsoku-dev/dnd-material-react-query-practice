@@ -11,6 +11,7 @@ import IndexPage from './pages/IndexPage'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import PostPage from './pages/PostPage'
 import PostDetailPage from './pages/PostDetailPage'
+import MemoPage from './pages/MemoPage'
 
 
 const queryCache = new QueryCache()
@@ -33,6 +34,9 @@ function App() {
               <li>
                 <Link to='/post'>Post</Link>
               </li>
+              <li>
+                <Link to='/memo'>Memo</Link>
+              </li>
             </ul>
           </nav>
           <Switch>
@@ -47,6 +51,9 @@ function App() {
             </Route>
             <Route path='/post' exact>
               <PostPage />
+            </Route>
+            <Route path='/memo' exact>
+              <MemoPage />
             </Route>
           </Switch>
         </Router>
