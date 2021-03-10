@@ -16,25 +16,24 @@ const Memo: FunctionComponent<Props> = () => {
     return axios.post('/api/memos', values).then((res) => res.data)
   }, {
     // Optimistic Updates
+    // https://react-query.tanstack.com/guides/optimistic-updates#_top
     // 요청 후 fake data 로 바로 데이터 띄우기
-    onMutate: (values) => {
-
+    onMutate: (newMemo) => {
+      queryClient.cancelQueries('memos')
       const oldMemos = queryClient.getQueryData('memos')
-
       queryClient.setQueryData('memos', (oldMemos: any) => {
         return [
           ...oldMemos,
           {
-            ...values,
+            ...newMemo,
             id: Date.now(), // id는 일단.. ?
           },
         ]
       })
-
-      return () => queryClient.setQueryData('memos', oldMemos)
+      return { oldMemos }
     },
-    onError: (error, value, rollback) => {
-      queryClient.setQueryData('memos', rollback)
+    onError: (error, value, context:any) => {
+      queryClient.setQueryData('memos', context.previousMemos)
     },
     onSettled: () => queryClient.invalidateQueries('memos'), // 방법 1: 다시 요청
   })

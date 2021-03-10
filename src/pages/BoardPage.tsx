@@ -27,9 +27,25 @@ const BoardPage: FunctionComponent<Props> = () => {
     error,
   } = useMutation((values: any) =>
       axios.patch(`/api/boards/${values.id}`, values).then(res => res.data), {
+      // https://react-query.tanstack.com/guides/optimistic-updates#_top
+      onMutate: (newBoard) => {
+        queryClient.cancelQueries(['board', String(newBoard.id)])
+
+        const oldBoard = queryClient.getQueryData(['board', String(newBoard.id)])
+
+        // Optimistically update to the new value
+        queryClient.setQueryData('todos', (old: any) => [...old, newBoard])
+
+        // Return a context object with the snapshotted value
+        return { oldBoard }
+      },
+      onError: (error, values, context: any) => {
+        if (context) {
+          queryClient.setQueryData('todos', context?.oldBoard)
+        }
+      },
       // 방법 1 : patch 하고나면 새로운 데이터로 갱신하기위해 한번 더 호출한다.
       // onSuccess: (data, values) => queryClient.invalidateQueries(['board', String(values.id)]),
-
       // 방법 2 : react-query 로 로컬 캐시를 최신화한다. (갱신을 위한 api 통신은 하지않음)
       onSuccess: (data, values) => {
         queryClient.setQueryData(['board', String(values.id)], data)
