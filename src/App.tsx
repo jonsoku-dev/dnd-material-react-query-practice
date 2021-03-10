@@ -9,6 +9,7 @@ import {
 import DndPage from './pages/DndPage'
 import IndexPage from './pages/IndexPage'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import PostPage from './pages/PostPage'
 
 
 const queryCache = new QueryCache()
@@ -30,13 +31,15 @@ function App() {
               </li>
             </ul>
           </nav>
-
           <Switch>
             <Route path='/' exact>
               <IndexPage />
             </Route>
-            <Route path='/dnd'>
+            <Route path='/dnd' exact>
               <DndPage />
+            </Route>
+            <Route path='/post' exact>
+              <PostPage />
             </Route>
           </Switch>
         </Router>

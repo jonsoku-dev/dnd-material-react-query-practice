@@ -2,7 +2,6 @@ import React, { FunctionComponent } from 'react'
 import { useQuery, QueryCache, useQueryClient } from 'react-query'
 import axios from 'axios'
 import { PostResult } from '../../types/post'
-import { log } from 'util'
 
 interface Props {
   postId: number

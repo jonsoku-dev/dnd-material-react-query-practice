@@ -1,20 +1,16 @@
-import React from 'react'
-import Posts from '../components/Posts'
-import Post from '../components/Post'
+import React, { useState } from 'react'
+import Pokemon from '../components/Pokemon'
+import Count from '../components/Count'
+import PokemonSearch from '../components/PokemonSearch'
 
 const IndexPage = () => {
-  const [postId, setPostId] = React.useState(-1)
+  const [pokemon, setPokemon] = useState<string>('')
   return (
     <div>
-      {postId > -1 ? (
-          <Post
-            postId={postId}
-            setPostId={setPostId} />
-        )
-        : (
-          <Posts setPostId={setPostId} />
-        )
-      }
+      <input value={pokemon} onChange={e => setPokemon(e.target.value)} />
+      <PokemonSearch pokemon={pokemon} />
+      <Count queryKey={'pokemon1'} />
+      <Pokemon queryKey={'pokemon1'} />
     </div>
   )
 }
