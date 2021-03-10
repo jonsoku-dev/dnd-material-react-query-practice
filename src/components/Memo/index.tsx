@@ -18,6 +18,9 @@ const Memo: FunctionComponent<Props> = () => {
     // Optimistic Updates
     // 요청 후 fake data 로 바로 데이터 띄우기
     onMutate: (values) => {
+
+      const oldMemos = queryClient.getQueryData('memos')
+
       queryClient.setQueryData('memos', (oldMemos: any) => {
         return [
           ...oldMemos,
@@ -27,10 +30,11 @@ const Memo: FunctionComponent<Props> = () => {
           },
         ]
       })
+
+      return () => queryClient.setQueryData('memos', oldMemos)
     },
-    onError: (error) => {
-      const err = error as AxiosError
-      window.alert(err.response?.data.message)
+    onError: (error, value, rollback) => {
+      queryClient.setQueryData('memos', rollback)
     },
     onSettled: () => queryClient.invalidateQueries('memos'), // 방법 1: 다시 요청
   })
