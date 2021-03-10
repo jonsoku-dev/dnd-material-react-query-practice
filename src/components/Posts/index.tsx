@@ -1,12 +1,13 @@
 import React, { FunctionComponent } from 'react'
-import { useQuery } from 'react-query'
+import { useQuery, useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
-import { fetchPosts } from '../../actions/apis'
+import { fetchPost, fetchPosts } from '../../actions/apis'
 
 interface Props {
 }
 
 const Posts: FunctionComponent<Props> = () => {
+  const queryClient = useQueryClient()
   const [count, increment] = React.useReducer(d => d + 1, 0)
 
   const postsQuery = useQuery('posts', fetchPosts, {
@@ -28,7 +29,11 @@ const Posts: FunctionComponent<Props> = () => {
           <ul>
             {postsQuery.data?.map(post => {
               return (
-                <li key={post.id}>
+                <li key={post.id} onMouseEnter={() => {
+                  queryClient.prefetchQuery(['post', post.id], () =>
+                    fetchPost(post.id.toString()),
+                  )
+                }}>
                   <Link to={`/post/${post.id}`}>
                     {post.title}
                   </Link>
