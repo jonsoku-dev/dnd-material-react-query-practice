@@ -12,6 +12,7 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import PostPage from './pages/PostPage'
 import PostDetailPage from './pages/PostDetailPage'
 import MemoPage from './pages/MemoPage'
+import BoardPage from './pages/BoardPage'
 
 
 const queryCache = new QueryCache()
@@ -37,6 +38,9 @@ function App() {
               <li>
                 <Link to='/memo'>Memo</Link>
               </li>
+              <li>
+                <Link to='/board/1'>Board</Link>
+              </li>
             </ul>
           </nav>
           <Switch>
@@ -54,6 +58,9 @@ function App() {
             </Route>
             <Route path='/memo' exact>
               <MemoPage />
+            </Route>
+            <Route path='/board/:boardId'>
+              <BoardPage />
             </Route>
           </Switch>
         </Router>
