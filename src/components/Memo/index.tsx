@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import axios from 'axios'
 import MemoForm from './MemoForm'
 
@@ -7,14 +7,19 @@ interface Props {
 }
 
 const Memo: FunctionComponent<Props> = () => {
+  const queryClient = useQueryClient()
   const memosQuery = useQuery('memos', () => {
     return axios.get('/api/memos').then((res) => res.data)
   })
 
-  const createMemo = (values: any) => {
-    console.log('create memo', values)
-  }
-
+  const { mutate: createMemo, isLoading, isError, isSuccess } = useMutation((values: any) => {
+    return axios.post('/api/memos', values).then((res) => res.data)
+  }, {
+    onSuccess: () => {
+      // 다시 요청
+      queryClient.invalidateQueries('memos')
+    },
+  })
   return (
     <section>
       <div>
@@ -32,12 +37,14 @@ const Memo: FunctionComponent<Props> = () => {
         )}
       </div>
 
-      <h3>Create New Memo</h3>
-      <MemoForm
-        onSubmit={createMemo}
-        clearOnSubmit={true}
-        submitText={'Create Memo'}
-      />
+      <div>
+        <h3>Create New Memo</h3>
+        <MemoForm
+          onSubmit={createMemo}
+          clearOnSubmit={true}
+          submitText={isLoading ? 'saving...' : isError ? 'Error !' : isSuccess ? 'Saved!!' : 'Create Memo'}
+        />
+      </div>
     </section>
   )
 }
